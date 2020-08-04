@@ -1,10 +1,12 @@
 #!/bin/sh
 
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-PYTHONPATH=/usr/lib/python37.zip:/usr/lib/python3.7:/usr/lib/python3.7/lib-dynload:/home/pi/.local/lib/python3.7/site-packages:/usr/local/lib/python3.7/dist-packages:/usr/lib/python3/dist-packages
-PYHOME=/home/pi/python
+dir=`dirname $0`
+setenv=$dir/set-env.sh
 
-export PATH
-export PYTHONPATH
-export PYHOME
-/usr/bin/python3 $PYHOME/emailConfig.py --debug warn >> /home/pi/logs/email-sentry.log 2>&1 &
+if [ ! -f $setenv ]
+then
+   echo "Could not find file $setenv" >> /home/pi/logs/email-sentry.log
+else
+   . $setenv
+   /usr/bin/python3 $PYHOME/emailConfig.py --debug warn >> /home/pi/logs/email-sentry.log 2>&1 &
+fi
